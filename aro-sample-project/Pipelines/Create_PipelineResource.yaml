@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: git-source
+  namespace: aro-redhat-vsantanu-dev
+spec:
+  type: git
+  params:
+    - name: url
+      value: https://github.com/panchsan/aro-sample-project.git

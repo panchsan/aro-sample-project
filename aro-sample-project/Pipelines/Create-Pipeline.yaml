@@ -1,0 +1,42 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: dotnet-build-deploy-pipeline
+  namespace: aro-redhat-vsantanu-dev
+spec:
+  resources:
+    - name: git-source
+      type: git
+    - name: image
+      type: image
+  tasks:
+    - name: fetch-repository
+      taskRef:
+        name: git-clone
+      resources:
+        inputs:
+          - name: git-source
+            resource: git-source
+    - name: build-image
+      taskRef:
+        name: buildah
+      resources:
+        inputs:
+          - name: git-source
+            resource: git-source
+        outputs:
+          - name: image
+            resource: image
+      params:
+        - name: DOCKERFILE
+          value: ./Dockerfile
+        - name: TLSVERIFY
+          value: "false"
+    - name: deploy
+      taskRef:
+        name: kubernetes-deploy
+      params:
+        - name: manifest_dir
+          value: manifests
+        - name: namespace
+          value: aro-redhat-vsantanu-dev

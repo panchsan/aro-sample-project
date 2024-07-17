@@ -1,0 +1,47 @@
+apiVersion: triggers.tekton.dev/v1beta1
+kind: TriggerTemplate
+metadata:
+  name: aro-sample-app
+spec:
+  params:
+  - name: APP_NAME
+    description: The deploying application name
+    default: my-sample-dotnet-app
+  - name: APP_GIT_REPO
+    description: The git hub repository
+    default: 'https://github.com/panchsan/aro-sample-project.git'
+  - name: GIT_REVISION
+    description: The git branch
+    default: main
+  - name: PROJECT_NAME
+    description: The project namespace
+    default: cmf-pipeline-project
+
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1
+    kind: PipelineRun
+    metadata:
+      generateName: aro-dotnet-builder-pipeline-build-deploy-$(tt.params.APP_GIT_REPO)-
+    spec:
+      taskRunTemplate:
+        serviceAccountName: pipeline
+      pipelineRef:
+        name: aro-dotnet-builder-pipeline
+      params:
+      - name: APP_NAME
+        value: $(tt.params.APP_NAME)
+      - name: APP_GIT_REPO
+        value: $(tt.params.APP_GIT_REPO)
+      - name: GIT_REVISION
+        value: $(tt.params.GIT_REVISION)
+      - name: PROJECT_NAME
+        value: $(tt.params.PROJECT_NAME)
+      workspaces:
+      - name: shared-workspace
+        volumeClaimTemplate:
+          spec:
+            accessModes:
+              - ReadWriteOnce
+            resources:
+              requests:
+                storage: 500Mi

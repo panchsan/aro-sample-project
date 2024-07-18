@@ -1,8 +1,20 @@
-apiVersion: triggers.tekton.dev/v1beta1
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: aro-sample-app
+  name: github-eventlistener
 spec:
   serviceAccountName: pipeline
   triggers:
-    - triggerRef: aro-sample-app-trigger
+    - name: github-trigger
+      interceptors:
+        - ref:
+            name: "github"
+          params:
+            - name: secretRef
+              value:
+                secretKey: secretToken
+                secretName: webhook-secret
+      bindings:
+        - ref: github-binding
+      template:
+        ref: github-template

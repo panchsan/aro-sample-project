@@ -1,1 +1,2 @@
 oc expose svc el-aro-sample-app
+http://el-aro-sample-app-cmf-pipeline-project.apps.cmfaropoc.eastus.aroapp.io

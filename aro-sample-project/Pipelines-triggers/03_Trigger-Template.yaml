@@ -1,4 +1,4 @@
-apiVersion: triggers.tekton.dev/v1beta1
+apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerTemplate
 metadata:
   name: github-template
@@ -9,30 +9,20 @@ spec:
       default: main
     - name: gitrepositoryurl
       description: The git repository URL
-      default: 'https://github.com/panchsan/aro-sample-project.git'
   resourcetemplates:
-    - apiVersion: tekton.dev/v1
+    - apiVersion: tekton.dev/v1beta1
       kind: PipelineRun
       metadata:
-        generateName: aro-dotnet-builder-github-pipelinerun-
+        generateName: github-pipelinerun-
       spec:
         pipelineRef:
           name: aro-dotnet-builder-pipeline
-        resources:
-          - name: git-source
-            resourceSpec:
-              type: git
-              params:
-                - name: url
-                  value: $(params.gitrepositoryurl)
-                - name: revision
-                  value: $(params.gitrevision)
-              workspaces:
-              - name: shared-workspace
-                volumeClaimTemplate:
-                  spec:
-                    accessModes:
-                      - ReadWriteOnce
-                    resources:
-                      requests:
-                        storage: 500Mi
+        workspaces:
+          - name: shared-workspace
+            persistentVolumeClaim:
+              claimName: my-sample-app-tekton-pvc
+        params:
+          - name: gitrevision
+            value: $(params.gitrevision)
+          - name: gitrepositoryurl
+            value: $(params.gitrepositoryurl)

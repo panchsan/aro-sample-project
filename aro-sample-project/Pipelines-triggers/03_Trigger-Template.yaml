@@ -9,6 +9,7 @@ spec:
       default: main
     - name: gitrepositoryurl
       description: The git repository URL
+      default: 'https://github.com/panchsan/aro-sample-project.git'
   resourcetemplates:
     - apiVersion: tekton.dev/v1
       kind: PipelineRun

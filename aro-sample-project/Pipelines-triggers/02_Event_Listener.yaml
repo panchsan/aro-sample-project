@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: EventListener
 metadata:
-  name: github-eventlistener
+  name: github-listener
 spec:
   serviceAccountName: pipeline
   triggers:

@@ -1,4 +1,4 @@
-apiVersion: triggers.tekton.dev/v1alpha1
+apiVersion: triggers.tekton.dev/v1beta1
 kind: TriggerTemplate
 metadata:
   name: github-template
@@ -10,7 +10,7 @@ spec:
     - name: gitrepositoryurl
       description: The git repository URL
   resourcetemplates:
-    - apiVersion: tekton.dev/v1beta1
+    - apiVersion: tekton.dev/v1
       kind: PipelineRun
       metadata:
         generateName: aro-dotnet-builder-github-pipelinerun-
@@ -26,3 +26,12 @@ spec:
                   value: $(params.gitrepositoryurl)
                 - name: revision
                   value: $(params.gitrevision)
+              workspaces:
+              - name: shared-workspace
+                volumeClaimTemplate:
+                  spec:
+                    accessModes:
+                      - ReadWriteOnce
+                    resources:
+                      requests:
+                        storage: 500Mi

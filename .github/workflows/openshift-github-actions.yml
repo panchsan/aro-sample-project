@@ -45,7 +45,7 @@ env:
 
   # 🖊️ EDIT to change the image registry settings.
   # Registries such as GHCR, Quay.io, and Docker Hub are supported.
-  IMAGE_REGISTRY: dochubpanchsan/aro-sample-app:latest
+  IMAGE_REGISTRY: dochubpanchsan/aro-sample-app
   IMAGE_REGISTRY_USER: dochubpanchsan
   IMAGE_REGISTRY_PASSWORD: ${{ secrets.IMAGE_REGISTRY_PASSWORD }}
 

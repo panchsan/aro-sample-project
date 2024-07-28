@@ -120,6 +120,11 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v4
 
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '8.0.x'  
+
     - name: Determine app name
       if: env.APP_NAME == ''
       run: |
